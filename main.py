@@ -53,9 +53,9 @@ def job():
             video_path=combined_video_path,
             title=random_title,
             description="Subscribe NOW",
-            category="22",  # Choose the appropriate category
+            category="22", 
             keywords="Tate, AdinRoss",
-            privacy_status="public"  # or "private", "unlisted"
+            privacy_status="public" 
         )
 
 # schedule.every().day.at("10:00").do(job)
