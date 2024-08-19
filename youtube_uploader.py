@@ -8,7 +8,7 @@ from apiclient.errors import HttpError
 import httplib2
 import argparse
 
-CLIENT_SECRETS_FILE = "client_secrets.json"  # Path to your client_secrets.json
+CLIENT_SECRETS_FILE = "client_secrets.json"
 YOUTUBE_UPLOAD_SCOPE = "https://www.googleapis.com/auth/youtube.upload"
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
@@ -18,12 +18,10 @@ def get_authenticated_service():
     CREDENTIALS_FILE = "youtube_credentials.pickle"
 
     credentials = None
-    # Load existing credentials from a file
     if os.path.exists(CREDENTIALS_FILE):
         with open(CREDENTIALS_FILE, 'rb') as token:
             credentials = pickle.load(token)
 
-    # If there are no (valid) credentials available, let the user log in.
     if not credentials or not credentials.valid:
         if credentials and credentials.expired and credentials.refresh_token:
             credentials.refresh(Request())
@@ -31,7 +29,6 @@ def get_authenticated_service():
             flow = InstalledAppFlow.from_client_secrets_file(
                 CLIENT_SECRETS_FILE, SCOPES)
             credentials = flow.run_local_server(port=0)
-        # Save the credentials for the next run
         with open(CREDENTIALS_FILE, 'wb') as token:
             pickle.dump(credentials, token)
 
@@ -51,12 +48,11 @@ def initialize_upload(youtube, video_path, title, description, category, keyword
         },
         'status': {
             'privacyStatus': privacy_status,
-            'madeForKids': False,  # This video is not made for kids
-            'selfDeclaredMadeForKids': False  # Self-declaration of the content not being made for kids
+            'madeForKids': False,  
+            'selfDeclaredMadeForKids': False
         }
     }
 
-    # Call the API's videos.insert method to create and upload the video.
     insert_request = youtube.videos().insert(
         part=",".join(body.keys()),
         body=body,
